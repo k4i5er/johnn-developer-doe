@@ -199,7 +199,7 @@ class Character {
     this.johnBoostMood = new Image()
     this.johnBoostMood.src = './img/yes.png'
     this.johnGeniusMood = new Image()
-    this.johnGeniusMood.src = './img/genius.png'
+    this.johnGeniusMood.src = './img/genius-star.png'
     this.johnReally = new Image()
     this.johnReally.src = './img/really.png'
     this.johnWTF = new Image()
@@ -221,7 +221,7 @@ class Character {
         ctx.drawImage(this.johnBoostMood, this.x, this.y, this.width, this.height)
         break
       case 4:
-        ctx.drawImage(this.johnGeniusMood, this.x - 100, this.y - 500, this.width + 300, this.height + 300)
+        ctx.drawImage(this.johnGeniusMood, this.x - 45, this.y - 630, this.width + 300, this.height + 620)
     }
     // console.log('pic ' + this.johnPic.src)
   }
