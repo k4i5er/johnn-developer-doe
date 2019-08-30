@@ -1,10 +1,17 @@
 // Canvas setup
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
+const startButton = document.querySelector('button')
+const startScreen = document.querySelector('#start-screen')
+const game = document.querySelector('#game')
 
 // Setup global variables
 let cardClicked
 let interval = 0
+let boost = 0
+let fails = 0
+
+// Setup data structures
 const cardsFlipped = {
   firstCardIndex: null,
   secondCardIndex: null
@@ -48,95 +55,34 @@ class Cards {
     this.y = y
     this.width = width
     this.height = height
-    this.fColor = 'black'
     this.index = index
-    this.cover = new Image()
+    this.cover = new Image
     this.cover.src = back
     this.isCovered = true
-    // this.front = text
-    // this.textSrc = textSrc
-    // this.fontSizeAndName = '24px Courier'
-    // this.textX = 0
-    // this.textY = 0
-    // this.textMaxWidth = 0
-
-    // this.frontText = new Image()
-    // this.frontText.src = text
-
-    this.definition = new Image()
-    this.definition.src = knowledgeBase[0].definition
-    this.concept = new Image()
-    this.concept.src = knowledgeBase[0].concept
-
+    this.frontText = new Image
+    this.frontText.src = text
   }
 
   draw() {
-    // if (this.isCovered) {
-    //   ctx.drawImage(this.cover, this.x, this.y, this.width, this.height)
-    // } else {
-    //   ctx.drawImage(this.frontText, this.x, this.y, this.width, this.height)
-    // }
-    ctx.beginPath()
-    // console.log("Dibujando nuevo rect en " + this.fColor + this.x, this.y, this.width, this.height)
-    ctx.fillStyle = this.fColor
-    ctx.rect(this.x, this.y, this.width, this.height)
-    ctx.fill()
-    ctx.closePath()
-  }
-
-  setFillColor(color) {
-    this.fColor = color
-  }
-
-  getFillColor() {
-    return this.fColor
-  }
-
-  setText(text, textType) {
-    this.text = text
-    this.textType = textType
-    // ctx.beginPath()
-    // ctx.fillStyle = 'white'
-    // ctx.font = this.fontSizeAndName
-    if (this.textType === 'concept') {
-
-      // var imageObj = new Image();
-      // imageObj.onload = function () {
-      //   context.drawImage(this, 0, 0);
-      // };
-
-      // imageObj.src = dataURL;
-      // this.concept.src = this.text
-
-      // this.concept.onload = function () {
-      ctx.drawImage(this.concept, this.x, this.y, this.width, this.height);
-      // };
-
-      console.log("concept")
-
-      // imageObj.src = dataURL;
-      // ctx.drawImage(this.concept, this.x, this.y)
-
-      // this.textX = this.x + 1 //(this.x + this.width) / 2
-      // this.textY = this.y + 10 //(this.y + this.height) / 2
-
-    } else if (this.textType === 'definition') {
-      console.log("definition")
-      // this.definition.src = this.text
-      ctx.drawImage(this.definition, this.x, this.y, this.width, this.height)
-      // this.textX = this.x + 2
-      // this.textY = this.y + 2
-
+    if (this.isCovered) {
+      this.cover.addEventListener('load', e => {
+        ctx.drawImage(this.cover, this.x, this.y, this.width, this.height)
+      })
+      ctx.drawImage(this.cover, this.x, this.y, this.width, this.height)
+    } else if (this.isCovered === false) {
+      this.frontText.addEventListener('load', e => {
+        ctx.drawImage(this.frontText, this.x, this.y, this.width, this.height);
+      })
+      ctx.drawImage(this.frontText, this.x, this.y, this.width, this.height);
     }
-    // this.textMaxWidth = this.x + 5 + this.width - 5
-    // ctx.fillText(text, this.textX, this.textY)
   }
 
   flip() {
-    if (this.getFillColor() === 'black') this.setFillColor('white')
-    else if (this.getFillColor() === 'white') this.setFillColor('black')
-    // if (this.isCovered) this.isCovered = false
-    // else this.isCovered = true
+    if (this.isCovered) {
+      this.isCovered = false
+    } else {
+      this.isCovered = true
+    }
     this.draw()
   }
 }
@@ -157,6 +103,58 @@ class CardBoard {
     }
   }
 
+  drawIterations() {
+    ctx.beginPath()
+    ctx.font = 'bold 30px Courier'
+    ctx.fillStyle = 'white'
+    ctx.fillText('1st', 850, 105)
+    ctx.fillText('Iteration', 850, 135)
+
+    ctx.arc(820, 110, 20, 0, 2 * Math.PI, false);
+    ctx.fillStyle = '#f00';
+    ctx.fill()
+    ctx.lineWidth = 4
+    ctx.strokeStyle = '#030'
+    ctx.stroke()
+
+    ctx.fillStyle = 'white'
+    ctx.fillText('2nd', 850, 255)
+    ctx.fillText('Iteration', 850, 285)
+
+    ctx.moveTo(840, 260)
+    ctx.arc(820, 260, 20, 0, 2 * Math.PI, false);
+    ctx.fillStyle = '#f00';
+    ctx.fill()
+    ctx.lineWidth = 4
+    ctx.strokeStyle = '#030'
+    ctx.stroke()
+
+    ctx.fillStyle = 'white'
+    ctx.fillText('3rd', 850, 405)
+    ctx.fillText('Iteration', 850, 435)
+
+    ctx.moveTo(840, 410)
+    ctx.arc(820, 410, 20, 0, 2 * Math.PI, false);
+    ctx.fillStyle = '#f00';
+    ctx.fill()
+    ctx.lineWidth = 4
+    ctx.strokeStyle = '#030'
+    ctx.stroke()
+
+    ctx.fillStyle = 'white'
+    ctx.fillText('4th', 850, 555)
+    ctx.fillText('Iteration', 850, 585)
+
+    ctx.moveTo(840, 560)
+    ctx.arc(820, 560, 20, 0, 2 * Math.PI, false);
+    ctx.fillStyle = '#f00';
+    ctx.fill()
+    ctx.lineWidth = 4
+    ctx.strokeStyle = '#030'
+    ctx.stroke()
+    ctx.closePath()
+  }
+
   createCards() {
     let hGap = 0
     let vGap = 0
@@ -166,75 +164,180 @@ class CardBoard {
       case 9:
         hGap = 20
         vGap = 20
-
         break;
       case 16:
         hGap = 15
         vGap = 15
-
         break;
       case 25:
         hGap = 10
         vGap = 10
-
         break;
     }
+    const randomPairs = getRandomPairs()
     for (let i = 0; i < this.cards; i++) {
       if (this.x + this.width > canvasLimit) {
         this.x = 10
         this.y += this.height + vGap
       }
-      const card = new Cards(this.x, this.y, this.width, this.height, i)
+      const card = new Cards(this.x, this.y, this.width, this.height, i, randomPairs[i], './img/card-back1.jpg')
       this.cardMatrix.push(card)
       this.x += this.width + hGap
     }
   }
 }
 
-// Functions
+
+class Character {
+  constructor(x, y, width, height) {
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+    this.johnPic = new Image()
+    this.johnPic.src = './img/oh.png'
+    this.johnBoostMood = new Image()
+    this.johnBoostMood.src = './img/yes.png'
+    this.johnGeniusMood = new Image()
+    this.johnGeniusMood.src = './img/genius.png'
+    this.johnReally = new Image()
+    this.johnReally.src = './img/really.png'
+    this.johnWTF = new Image()
+    this.johnWTF.src = './img/gotita.png'
+    this.johnPic.addEventListener('load', () => ctx.drawImage(this.johnPic, this.x, this.y, this.width, this.height)) //680, 50, 90, 90))
+
+    // this.johnBoostMood.addEventListener('load', () => ctx.drawImage(this.johnBoostMood, this.x, this.y, this.width, this.height)) //680, 50, 90, 90))
+
+  }
+
+  draw() {
+    switch (boost) {
+      case 0:
+        ctx.drawImage(this.johnPic, this.x, this.y, this.width, this.height)
+        break
+      case 1:
+      case 2:
+      case 3:
+        ctx.drawImage(this.johnBoostMood, this.x, this.y, this.width, this.height)
+        break
+      case 4:
+        ctx.drawImage(this.johnGeniusMood, this.x - 100, this.y - 500, this.width + 300, this.height + 300)
+    }
+    // console.log('pic ' + this.johnPic.src)
+  }
+
+  drawMissed() {
+    switch (fails) {
+      case 1:
+        ctx.drawImage(this.johnReally, this.x, this.y, this.width, this.height)
+        break
+      case 2:
+        ctx.drawImage(this.johnWTF, this.x, this.y, this.width, this.height)
+        fails = 0
+        break
+    }
+  }
+
+  move() {
+    for (let i = 0; i < 140; i++) {
+      this.y++
+    }
+  }
+}
+
+// Listeners
 
 canvas.addEventListener('click', clickHandler)
+startButton.addEventListener('click', startGame)
+
+// Functions
 
 function clickHandler(e) {
-  e.preventDefault()
   let mouseX = e.pageX - canvas.offsetLeft
   let mouseY = e.pageY - canvas.offsetTop
-  // console.log(mouseX, mouseY)
   for (let i = 0; i < board.cardMatrix.length; i++) {
-    const card = board.cardMatrix[i]
-    if ((mouseX >= card.x && mouseX <= card.x + card.width) && (mouseY >= card.y && mouseY <= card.y + card.height)) {
-      // console.log("click!")
+    let card = board.cardMatrix[i]
+    if ((mouseX >= card.x && mouseX <= card.x + card.width) && (mouseY >= card.y && mouseY <= card.y + card.height) && card.isCovered) {
       clickedCard(card)
       // break
     }
   }
 }
 
-function clickedCard(card, e) {
+function clickedCard(card) {
   card.flip()
-  // cardsFlipped++
-  // console.log('clickedCard!')
-  // updateCanvas()
   if (cardsFlipped.firstCardIndex === null) {
     cardsFlipped.firstCardIndex = card.index
-    // console.log("Ya no soy null " + cardsFlipped.firstCardIndex)
-    board.cardMatrix[cardsFlipped.firstCardIndex].setText(knowledgeBase[0].definition, 'definition')
-
   } else {
     cardsFlipped.secondCardIndex = card.index
-    board.cardMatrix[cardsFlipped.secondCardIndex].setText(knowledgeBase[0].concept, 'concept')
-
+    const card1 = board.cardMatrix[cardsFlipped.firstCardIndex]
+    const card2 = board.cardMatrix[cardsFlipped.secondCardIndex]
+    cardsFlipped.firstCardIndex = null
+    cardsFlipped.secondCardIndex = null
     const timeOutId = setTimeout(() => {
-      board.cardMatrix[cardsFlipped.firstCardIndex].flip()
-      board.cardMatrix[cardsFlipped.secondCardIndex].flip()
-      cardsFlipped.firstCardIndex = null
-      cardsFlipped.secondCardIndex = null
+      card1.flip()
+      card2.flip()
       canvas.addEventListener('click', clickHandler)
     }, 2000)
-    // updateCanvas()
     canvas.removeEventListener('click', clickHandler)
-  }
 
+    if (card1.frontText.src.charAt(card1.frontText.src.length - 5) === card2.frontText.src.charAt(card2.frontText.src.length - 5)) {
+      canvas.addEventListener('click', clickHandler)
+      clearTimeout(timeOutId)
+      boost++
+      john.move()
+      updateCanvas()
+      switch (boost) {
+        case 1:
+          ctx.beginPath()
+          ctx.arc(820, 110, 20, 0, 2 * Math.PI, false);
+          ctx.fillStyle = '#3f3';
+          ctx.fill()
+          ctx.lineWidth = 4
+          ctx.strokeStyle = '#030'
+          ctx.stroke()
+          ctx.closePath()
+          break
+        case 2:
+          ctx.beginPath()
+          ctx.moveTo(840, 260)
+          ctx.arc(820, 260, 20, 0, 2 * Math.PI, false);
+          ctx.fillStyle = '#3f3';
+          ctx.fill()
+          ctx.lineWidth = 4
+          ctx.strokeStyle = '#030'
+          ctx.stroke()
+          ctx.closePath()
+          break
+        case 3:
+          ctx.beginPath()
+          ctx.moveTo(840, 410)
+          ctx.arc(820, 410, 20, 0, 2 * Math.PI, false);
+          ctx.fillStyle = '#3f3';
+          ctx.fill()
+          ctx.lineWidth = 4
+          ctx.strokeStyle = '#030'
+          ctx.stroke()
+          ctx.closePath()
+          break
+        case 4:
+          ctx.beginPath()
+          ctx.moveTo(840, 560)
+          ctx.arc(820, 560, 20, 0, 2 * Math.PI, false);
+          ctx.fillStyle = '#f00';
+          ctx.fill()
+          ctx.lineWidth = 4
+          ctx.strokeStyle = '#030'
+          ctx.stroke()
+          ctx.closePath()
+          break
+      }
+    } else {
+      fails++
+      ctx.clearRect(john.x, john.y, john.width, john.height)
+      john.drawMissed()
+    }
+  }
 }
 
 function clearCanvas() {
@@ -244,16 +347,50 @@ function clearCanvas() {
 function updateCanvas() {
   clearCanvas()
   board.draw()
+  board.drawIterations()
+  john.draw()
+
+}
+
+function randomizeAll(min, length) {
+  const arr = []
+  let i = min
+  do {
+    const nuevo = Math.floor(min + (Math.random() * length))
+    if (arr.indexOf(nuevo) != -1) {
+      continue;
+    } else {
+      arr.push(nuevo)
+      i++
+    }
+  } while (arr.length < length)
+  return arr
+}
+
+function getRandomPairs() {
+  const arrPairs = []
+  const randomIndex = randomizeAll(0, 6)
+  for (let i = 0; i < randomIndex.length - 1; i++) {
+    arrPairs.push(knowledgeBase[randomIndex[i]].concept)
+    arrPairs.push(knowledgeBase[randomIndex[i]].definition)
+  }
+  arrPairs.sort(() => Math.random() - 0.5)
+  return arrPairs
 }
 
 // Instances & variables
-// const cards = new Cards(10, 10, 100, 140)
-// cards.draw()
 
 // const board = new CardBoard(25, 114, 128) // 5x5 
 // const board = new CardBoard(16, 120, 159) // 4x4
 const board = new CardBoard(9, 170, 213) // 3x3 
+const john = new Character(650, 50, 120, 120)
 
-board.createCards()
-board.draw()
-// interval = setInterval(updateCanvas, 1000 / 60)
+function startGame() {
+  startScreen.style.display = 'none'
+  game.style.display = 'flex'
+  board.createCards()
+  board.draw()
+  board.drawIterations()
+  john.draw()
+  updateCanvas()
+}
